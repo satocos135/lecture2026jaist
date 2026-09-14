@@ -19,10 +19,16 @@ class Token(NamedTuple):
     lemma: str  # 原型
 
 
-def convert(row: str) -> Token:
+def convert(row: str) -> Token | None:
     # 1行ずつ処理する
-    surface, body = row.split('\t')
-    splitted = body.split(',')
+    x = row.split('\t')
+    if len(x) == 2:
+        surface, body = x
+        splitted = body.split(',')
+    else:
+        # バージョンが上がってタブ区切りになった対応
+        surface = x[0]
+        splitted = x[1:]
     pos = splitted[0]
     subtype = splitted[1]
     lemma = splitted[6]
