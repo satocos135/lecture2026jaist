@@ -1,8 +1,11 @@
 import MeCab
 from typing import NamedTuple
 
-
-tagger = MeCab.Tagger()
+try:
+    import ipadic
+    tagger = MeCab.Tagger(ipadic.MECAB_ARGS)
+except ImportError:
+    tagger = MeCab.Tagger()
 
 
 class Token(NamedTuple):

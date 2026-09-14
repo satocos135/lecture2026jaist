@@ -5,7 +5,6 @@ from typing import NamedTuple, Iterable
 
 import MeCab
 import pandas as pd
-
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
@@ -44,10 +43,16 @@ def resolve(token: Token) -> str:
 class Tokenizer:
     # 自作辞書用の処理をまとめるためのクラス
     def __init__(self, dic: str | None = None) -> None:
+        try:
+            import ipadic
+            args = ipadic.MECAB_ARGS
+        except ImportError:
+            args = ''
+
         if dic:
-            self.tagger = MeCab.Tagger(f'-u {dic}')
+            self.tagger = MeCab.Tagger(f'-u {dic} ' + args)
         else:
-            self.tagger = MeCab.Tagger()
+            self.tagger = MeCab.Tagger(args)
 
     def tokenize(self, text: str) -> list[Token]:
         parsed = self.tagger.parse(text)
